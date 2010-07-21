@@ -1,6 +1,7 @@
 #summary Another Test Script.
 
 {{{
+//Process Entry point
 function (start)
 {
 	o is number
@@ -12,6 +13,8 @@ function (start)
 	p = false
 	o = 345
 	l = (2 + 3) / 5
+
+        //check logical || $$ operators
 	while((i==3 || j<7 && k))
 		out("done")
 }

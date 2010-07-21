@@ -1,0 +1,100 @@
+#summary A test script.
+
+
+{{{
+i=1
+j='sddd'
+k="asadasdas"
+z is number
+_obj_prop_def(yourobject)
+{
+ii is number
+jj is string
+}
+_obj_prop_def(myobject)
+{
+i is number private
+j is string
+k is boolean
+l is bounded-string-array 5
+m is unbounded-string-array
+n is yourobject	
+}
+_obj_mem_def(myobject,someaction)
+{
+out("asdas")
+return "dddd"
+}
+_obj_mem_def(myobject,_init_)
+{
+n = new yourobject()
+n.ii = 10
+n.jj = "123123"
+}
+function (start)
+{
+fff = new file()
+fff.open("C:\Documents and Settings\sumeetc\workspace\cpfj\src\com\cpfj\test2.jbsl");
+gf = fff.read()
+id = spawnProcess(gf)
+eval("i=90\nout(i)")
+out(gf)
+b = new myobject()
+ddd = b.someaction() + b.someaction()
+out(b.i)
+out(b.j)
+out(b.k)
+b.l[0] = "asdas"
+out(b.l)
+out(b.l[0])
+out(b.m)
+out(b.n.ii)
+out(ddd)
+b.j = 1 + k + b.i + 6 + 3 + b.n.ii
+out(b)
+ggg = b
+out(ggg)
+u = test(2) + test(2) - test(2) / test(2) * test(2)
+w = test1(2) + test1("asdasd")
+out(u)
+out(w)
+out(test(2))
+sendMsg(id,NOTIF,hi how are you)
+id = spawnProcess("C:\Documents and Settings\sumeetc\workspace\cpfj\src\com\cpfj\test2.jbsl",1)
+}
+function (test,t)
+{
+k=5
+out(t)
+return k
+}
+function (test)
+{
+for(i=0;i<10;i++)
+{
+out(j)
+}
+ff = 1
+while(ff<5)
+{
+out(ff)
+ff = ff + 1
+}
+if(ff==6)
+{
+out("if")
+}
+elseif(ff==8)
+{
+out("elseif")
+}
+else
+{
+out("else")
+}
+}
+function (test1,e)
+{
+return e
+}
+}}}

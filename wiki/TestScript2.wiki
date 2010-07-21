@@ -3,10 +3,10 @@
 {{{
 function (start)
 {
-for(i=1;i<100;i++)
-{
-out(i)
-}
-sendMsg(2,KILL,bye bye)
+	for(i=1;i<100;i++)
+	{
+		out(i)
+	}
+	sendMsg(2,KILL,bye bye)
 }
 }}}

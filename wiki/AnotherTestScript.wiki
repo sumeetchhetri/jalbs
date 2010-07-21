@@ -1,4 +1,4 @@
-#summary aonther Test Script.
+#summary Another Test Script.
 
 {{{
 function (start)

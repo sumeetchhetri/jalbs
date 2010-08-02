@@ -18,7 +18,12 @@
     <!-- Create the time stamp -->
     <tstamp/>
     <!-- Create the build directory structure used by compile -->
-  	<delete dir="${bin}"/>
+  	<delete dir="${bin}/com/cpfj/">
+  		<include name="*.*"/>
+  	</delete>
+  	<delete dir="${bin}">
+  		<include name="*.bat"/>
+  	</delete>
     <mkdir dir="${bin}"/>
   </target>
 

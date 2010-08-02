@@ -6,6 +6,7 @@
   <property name="src" location="src"/>
   <property name="bin"  location="bin"/>
   <property name="lib"  location="lib"/>
+  <property name="version"  value="1.0"/>
 
   <path id="compile.classpath">
 	    <fileset dir="${lib}">
@@ -17,6 +18,7 @@
     <!-- Create the time stamp -->
     <tstamp/>
     <!-- Create the build directory structure used by compile -->
+  	<delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
   </target>
 
@@ -30,12 +32,38 @@
   <target name="dist" depends="compile" description="generate the distribution" >
     <!-- Create the distribution directory -->
     <jar jarfile="${lib}/jalbs.jar" basedir="${bin}"/>
-  	<copy todir="${bin}" file="${src}/jalbs.bat"/>
+  	<copy todir="${bin}" file="${src}/jalbs.bat">
+  		<fileset dir="${src}">
+  			<include name="jalbs.bat"/>
+  		</fileset>
+  		<regexpmapper from="jalbs(.*)" to="jalbs${version}\1"/>
+  	</copy>
   	<copy todir="${bin}/com/cpfj/">
   		<fileset dir="${src}/com/cpfj/">
   			<include name="*.jbsl"/>
   		</fileset>
   	</copy>
+  	<zip destfile="jalbs${version}.zip">
+  	    <fileset dir=".">
+  	    	<exclude name="**/src/"/>
+  	    	<exclude name=".classpath"/>
+  			<exclude name=".project"/>
+  			<exclude name="build.xml"/>
+  	    	<exclude name="*.zip"/>
+  	    </fileset>
+  	</zip>
+  	<zip destfile="jalbs_src${version}.zip">
+  	    <fileset dir=".">
+  	    	<exclude name="**/bin/"/>
+  			<include name=".classpath"/>
+  			<include name=".project"/>
+  			<include name="build.xml"/>
+  	    	<include name="**/*.java"/>
+  	    	<include name="**/*.jbsl"/>
+  	    	<include name="**/*.bat"/>
+  	    	<include name="**/*.jar"/>
+  		</fileset>
+  	</zip>
   </target>
 
   <target name="clean" description="clean up" >

@@ -2,7 +2,7 @@
 
 = Quick Start Guide = 
 <font size="3" face="Georgia, Arial">
-  * Download the jalbs{{{<version>}}}.zip file and extract it to the location of your choice
+  * Download the *jalbs{{{<version>}}}.zip* file and extract it to the location of your choice
   * Make sure you have java installed on your system (>1.5)
   * Open a prompt and go to the *jalbs/bin* folder.
   * Type *jalbs.bat* at the prompt and hit Enter.

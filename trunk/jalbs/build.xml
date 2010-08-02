@@ -35,7 +35,8 @@
     <tstamp/>
     <!-- Create the build directory structure used by compile -->
   	<delete dir="${bin}/com/cpfj/">
-  		<include name="*.*"/>
+  		<include name="*.java"/>
+  		<include name="*.jbsl"/>
   	</delete>
   	<delete dir="${bin}">
   		<include name="*.bat"/>

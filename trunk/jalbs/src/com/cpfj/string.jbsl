@@ -1,7 +1,0 @@
-_obj_prop_def(string)
-{
-}
-function _obj_mem_def(string,split,delim)
-{
-return @CODE(me.split(delim))
-}

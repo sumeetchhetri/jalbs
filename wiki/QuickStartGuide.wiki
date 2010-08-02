@@ -9,5 +9,7 @@
   * You should see the jalbs prompt (it means you are ready to go..)
   * You can directly type the commands, each separated by the *\n* delimiter
   * To run a script just type *run {{{<script_name>}}}* and hit enter
+  * Sample scripts are located in bin/com/cpfj folder with the .jbsl extension
+  * You can also run multiple scripts from the command line by using the following command, jalbs.bat {{{<script_name_1>}}} {{{<script_name_2>}}} ...
   * The jalbs command line interpreter does not give a prompt yet when you try to run a script containing threaded logic(This is a bug, will fix it when i get some time.)
 </font>

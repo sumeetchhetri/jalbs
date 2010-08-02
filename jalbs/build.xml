@@ -4,7 +4,6 @@
     </description>
   <!-- set global properties for this build -->
   <property name="src" location="src"/>
-  <property name="build" location="build"/>
   <property name="bin"  location="bin"/>
   <property name="lib"  location="lib"/>
 
@@ -14,33 +13,29 @@
 	    </fileset>
   </path>
 	
-	
   <target name="init">
     <!-- Create the time stamp -->
     <tstamp/>
     <!-- Create the build directory structure used by compile -->
-    <mkdir dir="${build}"/>
+    <mkdir dir="${bin}"/>
   </target>
 
-  <target name="compile" depends="init"
-        description="compile the source " >
+  <target name="compile" depends="init" description="compile the source " >
     <!-- Compile the java code from ${src} into ${build} -->
-    <javac srcdir="${src}" destdir="${build}">
+    <javac srcdir="${src}" destdir="${bin}">
     	<classpath refid="compile.classpath"/>
     </javac>
   </target>
 
-  <target name="dist" depends="compile"
-        description="generate the distribution" >
+  <target name="dist" depends="compile" description="generate the distribution" >
     <!-- Create the distribution directory -->
-    <jar jarfile="${lib}/jalbs.jar" basedir="${build}"/>
+    <jar jarfile="${lib}/jalbs.jar" basedir="${bin}"/>
   	<copy todir="${bin}" file="${src}/jalbs.bat"/>
   </target>
 
-  <target name="clean"
-        description="clean up" >
+  <target name="clean" description="clean up" >
     <!-- Delete the ${build} directory trees -->
-    <delete dir="${build}"/>
+    <delete dir="${bin}"/>
   </target>
 </project>
 

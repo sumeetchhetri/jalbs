@@ -31,6 +31,11 @@
     <!-- Create the distribution directory -->
     <jar jarfile="${lib}/jalbs.jar" basedir="${bin}"/>
   	<copy todir="${bin}" file="${src}/jalbs.bat"/>
+  	<copy todir="${bin}/com/cpfj/">
+  		<fileset dir="${src}/com/cpfj/">
+  			<include name="*.jbsl"/>
+  		</fileset>
+  	</copy>
   </target>
 
   <target name="clean" description="clean up" >

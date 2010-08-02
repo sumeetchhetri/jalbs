@@ -1,0 +1,8 @@
+function (start)
+{	
+	fff = new file()
+	fff.open("C:\Documents and Settings\sumeetc\workspace\cpfj\src\com\cpfj\test2.jbsl");
+	gf = fff.read()
+	out(gf)
+	id = spawnProcess(gf)	
+}

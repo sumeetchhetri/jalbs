@@ -1,0 +1,107 @@
+// Copyright 2010, Sumeet Chhetri
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// 
+
+i=1
+j='sddd'
+k="asadasdas"
+z is number
+_obj_prop_def(yourobject)
+{
+	ii is number
+	jj is string
+}
+_obj_prop_def(myobject)
+{
+	i is number private
+	j is string
+	k is boolean
+	l is bounded-string-array 5
+	m is unbounded-string-array
+	n is yourobject	
+}
+_obj_mem_def(myobject,someaction)
+{
+	out("asdas")
+	return "dddd"
+}
+_obj_mem_def(myobject,_init_)
+{
+	n = new yourobject()
+	n.ii = 10
+	n.jj = "123123"
+}
+function (start)
+{	
+	eval("i=90\nout(i)")	
+	b = new myobject()
+	ddd = b.someaction() + b.someaction()
+	out(b.i)
+	out(b.j)
+	out(b.k)
+	b.l[0] = "asdas"
+	out(b.l)
+	out(b.l[0])
+	out(b.m)
+	out(b.n.ii)
+	out(ddd)
+	b.j = 1 + k + b.i + 6 + 3 + b.n.ii
+	out(b)
+	ggg = b
+	out(ggg)
+	u = test(2) + test(2) - test(2) / test(2) * test(2)
+	w = test1(2) + test1("asdasd")
+	out(u)
+	out(w)
+	out(test(2))
+	sendMsg(2,NOTIF,hi how are you)	
+}
+
+function (test,t)
+{
+	k=5
+	out(t)
+	return k
+}
+
+function (test)
+{
+	for(i=0;i<10;i++)
+	{
+		out(j)
+	}
+	ff = 1
+	while(ff<5)
+	{
+		out(ff)
+		ff = ff + 1
+	}
+	if(ff==6)
+	{
+		out("if")
+	}
+	elseif(ff==8)
+	{
+		out("elseif")
+	}
+	else
+	{
+		out("else")
+	}
+}
+
+function (test1,e)
+{
+	return e
+}

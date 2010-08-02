@@ -8,6 +8,6 @@
   * Type *jalbs.bat* at the prompt and hit Enter.
   * You should see the jalbs prompt (it means you are ready to go..)
   * You can directly type the commands, each separated by the *\n* delimiter
-  * To run a script just type {{{<script_name>}}} and hit enter
+  * To run a script just type *run {{{<script_name>}}}* and hit enter
   * The jalbs command line interpreter does not give a prompt yet when you try to run a script containing threaded logic(This is a bug, will fix it when i get some time.)
 </font>

@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.regex.Pattern;
 
 import com.cpfj.JBSLProcessor.Message;
 
@@ -93,7 +94,7 @@ public class ProcessM
 		}
 	}
 	
-	public void createproc(String cont)
+	public void createproc1(String cont)
 	{
 		try
 		{
@@ -292,6 +293,270 @@ public class ProcessM
 			e.printStackTrace();
 		}
 	}
+	
+	private static String fillZeroes(int length)
+	{
+		StringBuilder build = new StringBuilder();
+		for (int i = 0; i < length; i++) {
+			build.append("0");
+		}
+		return build.toString();
+	}
+	
+	private static int hasNewLineInCommand(String data) 
+	{
+		int flag = 0;
+		while(data.contains("\""))
+		{
+			flag = -1;
+			int ind = data.indexOf("\"");
+			if(ind<0)break;
+			String conststr = data.substring(ind+1, data.indexOf("\"", ind+1));
+			data = data.replaceFirst(Pattern.quote("\""+conststr+"\""), fillZeroes(conststr.length()+2));
+		}
+		if(flag!=-1)
+			flag = -999999;
+		int fnl = -999999;
+		if(data.indexOf("\\n")!=-1)
+		{
+			fnl = -data.indexOf("\\n");
+		}
+		int bnl = -1;
+		if(data.indexOf("\n")!=-1)
+		{
+			bnl = data.indexOf("\n");
+		}
+		if(-fnl<bnl && fnl!=-999999)
+			return fnl;
+		else if(bnl<-fnl && bnl!=-1 && fnl!=-999999)
+			return bnl;
+		else if(bnl!=-1)
+			return bnl;
+		return flag;
+	}
+	
+	public void createproc(String cont)
+	{
+		try
+		{
+			//String[] units = cont.split("function ");
+			boolean initz = false;
+			//for(int i=0;i<units.length;i++)
+			//{
+				//String[] lineunits = cont.split("\n");
+				boolean funcstart = false;					
+				Function func = null;	
+				Object obj = null;
+				String objname = null;
+				int countbrcks = 0;
+				int index = -1;
+				while((index=hasNewLineInCommand(cont))!=-1 && !cont.equals(""))
+				{	
+					String linstring = null;
+					if(index!=-999999)
+					{
+						if(index>=0)
+						{
+							linstring = cont.substring(0, index);
+							cont = cont.substring(index+1);
+						}
+						else
+						{
+							linstring = cont.substring(0, -index);
+							cont = cont.substring(-index+2);
+						}
+					}
+					else if(index==-999999)
+					{
+						linstring = cont;
+						cont = "";
+					}
+					//System.out.println(linstring+index);
+					if((linstring.length()>2 && linstring.charAt(0)=='/' && linstring.charAt(1)=='/'))continue;
+					if(!funcstart && !initz && linstring.indexOf("=")!=-1 && linstring.indexOf(" new ")!=-1 
+							&& (linstring.indexOf("\"")>linstring.indexOf("=") || linstring.indexOf("\"")==-1) 
+							&& (linstring.indexOf("'")>linstring.indexOf("=") || linstring.indexOf("'")==-1)
+							) 
+					{
+						String[] strs = linstring.split("=");							
+						Var var = new Var();
+						var.setName(strs[0].trim());
+						String strss = strs[1].replaceFirst(" new ","");	
+						var.setType(strss.split("\\(")[0].trim());
+						strss = strss.replaceFirst(var.getType()+"\\(", "");
+						strss = strss.replaceFirst("\\)", "");
+						if(!initz && !funcstart)
+							var.setVisiblity("global");
+						else if(funcstart)
+							var.setVisiblity("function");
+						var.setLevel("default");
+						if(!var.getType().equals("file") && !var.getType().equals("socket"))
+						{
+							var.setValObj(objs.get(var.getType()));
+							Var.initializeVals(var, objs);
+							var.getValObj().init(strss, objs);
+						}
+						localVars.put(var.getName(), var);
+					}
+					else if(!funcstart && !initz && linstring.indexOf("=")!=-1 
+							&& (linstring.indexOf("\"")>linstring.indexOf("=") || linstring.indexOf("\"")==-1) 
+							&& (linstring.indexOf("'")>linstring.indexOf("=") || linstring.indexOf("'")==-1))
+					{
+						String[] strs = linstring.split("=");
+						if((strs[1].trim().charAt(0)=='"' || strs[1].trim().charAt(0)=='\'') && 
+							(strs[1].trim().charAt(strs[1].trim().length()-1)=='"' 
+								|| strs[1].trim().charAt(strs[1].trim().length()-1)=='\''))
+							strs[1] = strs[1].trim().substring(1,strs[1].trim().length()-1);
+						{
+							Var var = new Var();
+							var.setName(strs[0].trim());
+							var.setType("runtime");
+							var.setVisiblity("global");
+							var.setLevel("default");
+							var.setValue(strs[1].trim(),this);
+							localVars.put(var.getName(), var);
+						}
+					}
+					else if(!funcstart && !initz && linstring.indexOf(" is ")!=-1 
+							&& (linstring.indexOf("\"")>linstring.indexOf(" is ") || linstring.indexOf("\"")==-1) 
+							&& (linstring.indexOf("'")>linstring.indexOf(" is ") || linstring.indexOf("'")==-1))
+					{
+						String[] strs = linstring.split(" is ");
+						if((strs[1].trim().charAt(0)=='"' || strs[1].trim().charAt(0)=='\'') && 
+							(strs[1].trim().charAt(strs[1].trim().length()-1)=='"' 
+								|| strs[1].trim().charAt(strs[1].trim().length()-1)=='\''))
+							strs[1] = strs[1].trim().substring(1,strs[1].trim().length()-1);
+						{
+							Var var = new Var();
+							var.setName(strs[0].trim());
+							var.setType(strs[1].trim());
+							var.setVisiblity("global");
+							var.setName("default");
+							localVars.put(var.getName(), var);
+						}
+					}
+					else if(linstring.indexOf("function")!=-1 || linstring.indexOf("_obj_prop_def")!=-1
+							|| linstring.indexOf("_obj_mem_def")!=-1 || linstring.indexOf("thread_def_run")!=-1)
+					{							
+						String ter = linstring.trim().replaceAll("\\(","");
+						ter = ter.replaceAll("\\)","");
+						if(linstring.indexOf("function")!=-1 || linstring.indexOf("thread_def_run")!=-1)
+						{
+							if(linstring.indexOf("thread_def_run")!=-1)
+							{
+								ter = ter.replaceAll("thread_def_run","");
+								ter = "thread::"+ter;
+							}
+							else
+								ter = ter.replaceAll("function ","");
+							func = new Function(ter);
+							if(ter.indexOf("start")!=-1 || ter.indexOf("start,")!=-1)
+								initz = true;
+						}
+						else if(linstring.indexOf("_obj_prop_def")!=-1)
+						{
+							ter = ter.replaceAll("_obj_prop_def","");
+							obj = new Object(this);
+							obj.setName(ter);
+						}
+						else if(linstring.indexOf("_obj_mem_def")!=-1)
+						{
+							ter = ter.replaceAll("_obj_mem_def","");
+							String[] temo = ter.split(",");
+							objname = temo[0];
+							ter = ter.replaceFirst(temo[0]+",","");
+							func = new Function(ter);
+							initz = true;
+						}
+					}
+					else if("{".equals(linstring.trim()))
+					{
+						if(funcstart)
+							func.addInstructions(linstring);
+						funcstart = true;
+						countbrcks++;							
+					}
+					else if("}".equals(linstring.trim()))
+					{
+						countbrcks--;							
+						if(countbrcks==0)
+						{
+							funcstart = false;
+							if(func!=null && objname!=null && objs.get(objname)!=null && !func.getName().equals("start"))
+							{
+								func.done();
+								objs.get(objname).addFunc(false, func);
+								func = null;
+								objname = null;
+							}
+							else if(func!=null)
+							{
+								func.done();
+								if(func.getName().equals("start"))
+									this.mainFunc = func;
+								else
+									funcs.put(func.getName()+func.getIdent(), func);
+								func = null;
+							}
+							else if(obj!=null)
+							{
+								objs.put(obj.getName(), obj);
+								obj = null;
+							}
+						}
+						else
+						{
+							if(func!=null)
+								func.addInstructions(linstring);
+						}
+					}
+					else if(funcstart)
+					{
+						if(func!=null)
+						{
+							func.addInstructions(linstring);
+						}
+						else if(obj!=null)
+						{
+							String[] strs = linstring.split(" is ");
+							if((strs[1].trim().charAt(0)=='"' || strs[1].trim().charAt(0)=='\'') && 
+								(strs[1].trim().charAt(strs[1].trim().length()-1)=='"' 
+									|| strs[1].trim().charAt(strs[1].trim().length()-1)=='\''))
+								strs[1] = strs[1].trim().substring(1,strs[1].trim().length()-1);
+							{
+								Var var = new Var();
+								var.setName(strs[0].trim());
+								strs = strs[1].split(" ");
+								var.setType(strs[0].trim());
+								if(var.getType().equals("bounded-string-array"))
+								{
+									var.setArrEle(Integer.valueOf(strs[1]));
+									if(strs.length>2 && !strs[2].equals(""))
+										var.setVisiblity(strs[2]);
+									if(strs.length>3 && !strs[3].equals(""))
+										var.setLevel(strs[3]);
+								}
+								else if(strs.length>1)
+									var.setVisiblity(strs[1]);
+								if(strs.length>2 && !strs[2].equals(""))
+									var.setLevel(strs[2]);
+								if(var.getLevel()==null || !var.getLevel().toLowerCase().equals("private"))
+									obj.addVar(false,var,objs);
+								else
+									obj.addVar(true,var,objs);
+							}
+						}
+					}
+				}
+			//}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	
 	private long generateNewID()
 	{
 		pidcounter++;

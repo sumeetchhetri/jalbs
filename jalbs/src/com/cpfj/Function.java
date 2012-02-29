@@ -296,6 +296,7 @@ public class Function implements Cloneable
 						message.setType(evaluate(args[1],procm));
 						message.setMessage(evaluate(args[2],procm));
 						JBSLProcessor.processes.get(new Long(argu)).addMesasge(message);
+						System.out.println("Sending message => "+evaluate(args[2],procm));
 					}
 				}
 				retVal = "";
@@ -312,7 +313,11 @@ public class Function implements Cloneable
 						System.out.println(message.getMessage().toString());
 					}
 					else
+					{
 						retVal = message.getMessage().toString();
+						System.out.println("Received message => "+retVal);
+						return retVal;
+					}
 				}
 				else
 					retVal = "";
@@ -391,7 +396,7 @@ public class Function implements Cloneable
 					{}
 					else
 						argu = evaluate(args[0],procm);
-					JBSLProcessor.evaluate(args[0]);
+					JBSLProcessor.synchronousEvaluate(args[0]);
 				}
 				retVal = "";
 				forwhif = true;
@@ -457,7 +462,7 @@ public class Function implements Cloneable
 				}
 			}
 			string = string.replace(funcn+"("+inter+")", "");
-		}
+		}		
 		if(string.indexOf("=")!=-1 || (string.indexOf(" is boolean")!=-1 
 				|| string.indexOf(" is string")!=-1 || string.indexOf(" is number")!=-1
 				|| string.indexOf(" is number")!=-1 || string.indexOf(" is bounded-string-array")!=-1
@@ -602,6 +607,11 @@ public class Function implements Cloneable
 				else if(procm.getLocalVars().get(strs[0].trim())!=null)
 					procm.getLocalVars().get(strs[0].trim()).setValue(val,procm);
 			}
+		}
+		else if(string.trim().indexOf("+")!=-1 || string.trim().indexOf("-")!=-1 
+				|| string.trim().indexOf("/")!=-1 || string.trim().indexOf("*")!=-1)
+		{
+			return evalBODMAS(string.trim(),procm);
 		}
 		else if(string.indexOf("return ")!=-1)
 		{

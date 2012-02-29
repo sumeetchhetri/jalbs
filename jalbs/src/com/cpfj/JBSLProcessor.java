@@ -19,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 
 public class JBSLProcessor
 {
@@ -99,6 +100,7 @@ public class JBSLProcessor
 				}
 			}
 		}).start();	
+		//System.out.println("Started process "+pro.getId());
 		return pro.getId();
 	}
 	
@@ -169,6 +171,7 @@ public class JBSLProcessor
 			{
 				for (int i = 0; i < args.length; i++)
 				{
+					//System.out.println("argument "+(i+1));
 					conc.newProcess(new ProcessM(args[i],1));	
 				}				
 			}
@@ -234,13 +237,13 @@ public class JBSLProcessor
 				&& (data.charAt(data.length()-1)=='"' || data.charAt(data.length()-1)=='\''))
 		{
 			data = data.substring(1,data.length()-1);
-			data = data.replaceAll("\\\\n", "\n");
+			//data = data.replaceAll("\\\\n", "\n");
 			data = "function (start)\n{\n" + data + "\n}";
 			JBSLProcessor.get().newProcess(new ProcessM(data));
 		}
 		else if(data!=null && !data.equals(""))
 		{
-			data = data.replaceAll("\\\\n", "\n");
+			//data = data.replaceAll("\\\\n", "\n");
 			data = "function (start)\n{\n" + data + "\n}";
 			JBSLProcessor.get().newProcess(new ProcessM(data));
 		}
@@ -252,17 +255,19 @@ public class JBSLProcessor
 				&& (data.charAt(data.length()-1)=='"' || data.charAt(data.length()-1)=='\''))
 		{
 			data = data.substring(1,data.length()-1);
-			data = data.replaceAll("\\\\n", "\n");
+			//data = data.replaceAll("\\\\n", "\n");
 			data = "function (start)\n{\n" + data + "\n}";
 			JBSLProcessor.get().newSynchronousProcess(new ProcessM(data));
 		}
 		else if(data!=null && !data.equals(""))
 		{
-			data = data.replaceAll("\\\\n", "\n");
+			//data = data.replaceAll("\\\\n", "\n");
 			data = "function (start)\n{\n" + data + "\n}";
 			JBSLProcessor.get().newSynchronousProcess(new ProcessM(data));
 		}
 	}
+	
+	
 }
 
 

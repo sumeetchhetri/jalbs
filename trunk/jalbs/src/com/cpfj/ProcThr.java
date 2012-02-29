@@ -19,8 +19,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.sun.media.sound.HsbParser;
-
 public class ProcThr implements Runnable
 {
 	private String args;
